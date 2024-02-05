@@ -11,13 +11,12 @@ import './App.css'
 import './assets/css/minireset.css'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <BrowserRouter>
          <Routes>
            <Route path='/login' element={<Login />}></Route>
-           <Route path='/admin' element={<Admin />}></Route>
+           <Route path='/' element={<Admin />}></Route>
          </Routes>
     </BrowserRouter>
   )

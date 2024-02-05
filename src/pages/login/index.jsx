@@ -1,38 +1,46 @@
 
 
 import React, { Component } from 'react'
-
+import { useNavigate,Navigate } from 'react-router-dom'
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input,message } from 'antd';
 
 import { reqLogin } from '../../api'
-import logoImg from './images/logo.png'
+import storeUtils from '../../utils/storeUtils'
+import memoryUtils from '../../utils/memoryUtils'
+import logoImg from '../../assets/images/logo.png'
 import './login.styl'
 
 
 //登录的路由组件
 export default class Login extends Component {
-  constructor(props){    super(props);
+  constructor(props){    
+    super(props);
+    this.state={
+      user:memoryUtils.user
+    }
     this.handleSubmit=this.handleSubmit.bind(this)
+    
+
   }  
   
   //async需要放在定义函数的左则
   async handleSubmit(value){
     const {username,password} = value
-    let response
-    //因为axios默认返回一个promise对像，所以使用await来接收
-    //如果是error就要try
-    try {
-        response = await reqLogin(username,password)
-    }    
-    catch (error){
-      console.log('error')
+    const result = await reqLogin(username,password)
+    if (result.status===0){
+      message.success('登录成功')
+      storeUtils.saveUser(result.data)
+      //所有路由组件三个特性
+      window.location.href= '/'
     }
-
     
+
   }
   render() {
-
+    if (this.state.user._id) {
+      window.location.href= '/'
+    }
     return (
       <div className='P-login'>
         <header className='P-login-header'>
