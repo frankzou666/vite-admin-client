@@ -8,6 +8,7 @@ import { Button, Checkbox, Form, Input,message } from 'antd';
 import { reqLogin } from '../../api'
 import storeUtils from '../../utils/storeUtils'
 import memoryUtils from '../../utils/memoryUtils'
+import {APP_NAME} from '../../config/globalConfig'
 import logoImg from '../../assets/images/logo.png'
 import './login.styl'
 
@@ -17,11 +18,11 @@ export default class Login extends Component {
   constructor(props){    
     super(props);
     this.state={
-      user:memoryUtils.user
+      user:memoryUtils.user,
+      loginSuccess:storeUtils.getUser()._id?true:false
     }
     this.handleSubmit=this.handleSubmit.bind(this)
     
-
   }  
   
   //async需要放在定义函数的左则
@@ -32,64 +33,77 @@ export default class Login extends Component {
       message.success('登录成功')
       storeUtils.saveUser(result.data)
       //所有路由组件三个特性
-      window.location.href= '/'
+      this.setState({loginSuccess:true})
+    } else{
+      message.error('登录失败!')
     }
     
 
   }
-  render() {
-    if (this.state.user._id) {
-      window.location.href= '/'
-    }
-    return (
-      <div className='P-login'>
-        <header className='P-login-header'>
-            <img src={logoImg}></img>
-            <h1>React后台管理系统</h1>
-        </header>
-        <section className='P-login-content'> 
-            <h2>用户登录</h2>
-            <Form
-               name="normal_login"
-               className="login-form"
-               //onFinish在表单submit 的时候调用，并且把所有参数做为一个对像传过去了
-               onFinish={this.handleSubmit}
-            //    onFinish={onFinish}
-            >
-                <Form.Item
-                 name="username"
-                 rules={[
-                    {required: true,message: '请输入用户名',},
-                    {min: 4,message: '用户名最小度为4位',},
-                    
-                  ]}
-                 
-                >
-                <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
-               </Form.Item>
-              <Form.Item
-                name="password"
-                rules={[
-                    {
-                      required: true,
-                      message: '请输入密码',
-                    },
-                  ]}
-              >
-                <Input
-                  prefix={<LockOutlined className="site-form-item-icon" />}
-                  type="password"
-                  placeholder="Password"
-                />
-              </Form.Item>
-              <Form.Item>
-               <Button type="primary" htmlType="submit"  className="login-form-button">
-                 登录
-               </Button>
-              </Form.Item>
-    </Form>
-        </section>
-      </div>
-    )
+  componentDidMount(){
+    window.document.title=APP_NAME
   }
+  render() {
+    if (this.state.loginSuccess) {
+       return <Navigate to='/'></Navigate>
+    } else {
+      return (
+        <div className='P-login'>
+          <header className='P-login-header'>
+              <img src={logoImg}></img>
+              <h1>{APP_NAME}管理系统</h1>
+          </header>
+          <section className='P-login-content'> 
+              <h2>用户登录</h2>
+              <Form
+                 name="normal_login"
+                 className="login-form"
+                 //onFinish在表单submit 的时候调用，并且把所有参数做为一个对像传过去了
+                 onFinish={this.handleSubmit}
+              //    onFinish={onFinish}
+              >
+                  <Form.Item
+                   name="username"
+                   rules={[
+                      {required: true,message: '请输入用户名',},
+                      {min: 4,message: '用户名最小度为4位',},
+                      
+                    ]}
+                   
+                  >
+                  <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+                 </Form.Item>
+                <Form.Item
+                  name="password"
+                  rules={[
+                      {
+                        required: true,
+                        message: '请输入密码',
+                      },
+                    ]}
+                >
+                  <Input
+                    prefix={<LockOutlined className="site-form-item-icon" />}
+                    type="password"
+                    placeholder="Password"
+                  />
+                </Form.Item>
+                <Form.Item>
+                 <Button type="primary" htmlType="submit"  className="login-form-button">
+                   登录
+                 </Button>
+                </Form.Item>
+      </Form>
+          </section>
+        </div>
+      )
+    }
+
+    
+    
+      
+    
+    
+  }    
+    
 }

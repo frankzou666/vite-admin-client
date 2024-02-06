@@ -1,48 +1,49 @@
-import React, { Component } from 'react'
+import React, { Component, useEffect } from 'react'
 import { Link ,useNavigate,Navigate} from 'react-router-dom'
 import {Menu} from 'antd';
 import { HomeOutlined, UserOutlined,HolderOutlined,IdcardOutlined,MailOutlined} from '@ant-design/icons'
+
+import {APP_NAME} from '../../config/globalConfig'
+import getIcon from '../../utils/getIcon'
 import logoImg from '../../assets/images/logo.png'
 import './left-nav.styl'
 
 
-class LeftNavWrapper extends Component {
-  constructor(props){
-    super(props)
+function LeftNav(){
+  
 
-  }  
-  render() {
-    const navigate = this.props.navigate
-    const homeMenuItems =[
-        { label:"Home",icon:<HomeOutlined />, key:'home1',onClick:()=>{navigate('/home')}},
-        { label:"Account" ,icon:<UserOutlined /> , key:'account1', onClick:()=>{navigate('/account')}},
+
+    const navigate=useNavigate();
+    
+    //菜单数据结构
+    const data =[
+      ["首页", 'home',[['Home','home1'],['Account','account1']]],
+      ["商品" ,'account',[['User','user'],['Role','role']]],
     ]
-    const goodMenuItems =[
-        { label:"Home",icon:<HomeOutlined />, key:'home2',onClick:()=>{navigate('/home')}},
-        { label:"Account" ,icon:<UserOutlined /> , key:'account2', onClick:()=>{navigate('/account')}},
-    ]
-    const mneuItems =[
-        { label:"首页",icon:<HomeOutlined />, key:'home',children:homeMenuItems},
-        { label:"商品" ,icon:<MailOutlined /> , key:'account',children:goodMenuItems},
-    ]
+    let datamenu=[]
+    
+    
+    //演染菜单数据
+    datamenu = data.map((item)=>{
+        return {label:item[0],key:item[1],icon:getIcon(item[0]),children:item[2].map((itemchildren)=>{
+          return {label:itemchildren[0],key:itemchildren[1],icon:getIcon(itemchildren[0]),onClick:()=>{return navigate(itemchildren[0].toLowerCase())}}
+        })}
+    })
+
     return (
       <div className='P-leftnav'>
         <Link className='M-leftnav-header'>
             <img src={logoImg}></img>
-            <h2>硅谷后台</h2>
+            <h2>{APP_NAME}</h2>
         </Link>
-        <Menu theme='dark' mode='inline' items={mneuItems}>
+        <Menu theme='dark' mode='inline'  items={datamenu}>
 
         </Menu>
       </div>
     )
-  }
-}
+}  
 
 
-function LeftNav(props) {
-    let navigate = useNavigate();
-    return <LeftNavWrapper {...props}  navigate={navigate} />;
-  }
 
-  export default LeftNav
+
+export default LeftNav

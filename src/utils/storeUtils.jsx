@@ -2,7 +2,7 @@
 
 const USER_KEY ='user_key'
 
-export default  storeUtils={
+const  storeUtils={
     saveUser(user){
         //key和
         window.localStorage.setItem(USER_KEY,JSON.stringify(user))
@@ -14,3 +14,5 @@ export default  storeUtils={
         window.localStorage.removeItem(USER_KEY)
     }
 }
+
+export default storeUtils
