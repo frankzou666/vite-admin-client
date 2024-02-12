@@ -6,6 +6,8 @@ import jsonp from 'jsonp'
 import ajax from "./ajax";
 import { message } from 'antd';
 
+
+import { PAGE_SIZE } from '../utils/constants';
 /*
 export  function reqLogin(username,password) {
     let url ='/login'
@@ -37,4 +39,37 @@ export const reqWeather=(city)=>{
 
 }
 
+//获取当前城市
+export const reqCity=()=>{
+    const url=`http://ip-api.com/json/`
+    return new Promise((resolve,reject)=>{
+        let promise;
+        promise = axios.get(url)
+        promise.then((response)=>{
+            resolve(response)
+        }).catch(()=>{
+            message.error('请求城市数据失败!')
+        })
+    })
 
+}
+
+
+
+//获取分类
+
+export const reqCategorys =(parentId)=> ajax('/api/manage/category/list',{parentId:parentId},'get') 
+
+export const reqAddCategorys =(categoryName,parentId)=>ajax('/api/manage/category/add',{categoryName,parentId},'post') 
+
+export const reqUpdateCategorys =({categoryId,categoryName})=>ajax('/api/manage/category/update',{categoryId,categoryName},'post') 
+
+
+//获取商品
+
+export const reqProducts =(pageNum,pageSize=PAGE_SIZE)=> ajax('/api/manage/product/list',{pageNum:pageNum,pageSize:pageSize},'get') 
+
+export const reqProductsSearch =(pageNum,pageSize=PAGE_SIZE,searchName,productName,productDesc)=> ajax('/api/manage/product/search',{pageNum:pageNum,pageSize:pageSize,searchName:searchName,productName:productName,productDesc:productDesc},'get') 
+
+export const reqCategoryInfo =(categoryId)=> ajax('/api/manage/category/info',{categoryId:categoryId},'get') 
+export const reqCategoryUpdateStatus =(productId,status)=> ajax('/api/manage/product/updateStatus',{productId:productId,status:status},'post') 

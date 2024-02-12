@@ -12,6 +12,9 @@ import Home from '../home'
 import Account from '../account'
 import User from '../user'
 import Role from '../role'
+import Product from '../product'
+import AddUpdate from '../product/addupdate'
+import ProductDetail from '../product/productdetail'
 import {APP_NAME} from '../../config/globalConfig'
 
 import './admin.styl'
@@ -41,10 +44,14 @@ export default class Admin extends Component {
           <Sider><LeftNav></LeftNav></Sider>
           <Layout>
             <LayoutHeader></LayoutHeader>
-            <Content className='M-content'>content
+            <Content className='M-content'>
             <Routes>
               <Route path='/home' element={<Home />}></Route>
               <Route path='/account' element={<Account />}></Route>
+              <Route path='/product' element={<Product />} extact></Route>
+              <Route path='/product/addupdate'     element={<AddUpdate />}></Route>
+              <Route path='/product/productdetail' element={<ProductDetail />}></Route>
+              <Route path='/product/*' element={<Product />}></Route>
               <Route path='/user' element={<User />}></Route>
               <Route path='/role' element={<Role />}></Route>
                {/*以前版本使用<Ridirect> 现只使用Navigte来处理了，定义一个默认路由*/} 

@@ -3,10 +3,11 @@ import { useLocation, useNavigate  } from 'react-router-dom'
 import {Modal} from 'antd';
 
 
-import {reqWeather} from '../../api/index'
+import {reqWeather,reqCity} from '../../api/index'
 import {APP_NAME} from '../../config/globalConfig'
 import {formatDate} from '../../utils/formatDate'
 import storeUtils from '../../utils/storeUtils'
+import LinkButton from '../../components/link-button'
 import './layout-header.styl'
 
 class LayoutHeaderWapper extends Component {
@@ -31,6 +32,7 @@ class LayoutHeaderWapper extends Component {
 
   //更新天气信息
    getWeather=async ()=>{
+    
     let weatherResponse= await reqWeather(this.state.city)
       if (weatherResponse.data.cod===200){
         this.setState({weather:weatherResponse.data.weather[0].main})
@@ -47,15 +49,24 @@ class LayoutHeaderWapper extends Component {
   getTitle=()=>{
     console.log(this.props.location.pathname)
   }
+  getCity= async ()=>{
+    let cityResponse = await reqCity()
+    if (cityResponse) {
+      this.setState({city:cityResponse.data.city})
+      this.getWeather()
+    }
+    
+
+  }
 
   //组件挂载开始执行定时器
   async componentDidMount(){
     this.setState({currentUser:storeUtils.getUser().username})
+    this.getCity()
     this.getCurrentDateTimeStrByInterval()
     this.getWeather()
     this.getTitle()
-    
-    
+     
     
   }
    
@@ -85,14 +96,15 @@ class LayoutHeaderWapper extends Component {
      clearInterval(this.intervalWeatherId)
   }
   render() {
-    const {weather,currentDateTimeStr,currentUser,titleName} = this.state
+    const {weather,currentDateTimeStr,currentUser,titleName,city} = this.state
     return (
       <div className='P-LayoutHeader'>
         <div className='header-top'>
           <h2>{APP_NAME}管理系统</h2>
           <div className='header-top-right'>
             <span>欢迎,{currentUser}</span>
-            <a href='' onClick={(e)=>this.handleLogout(e)}>退出</a>
+            {/* <a href='' onClick={(e)=>this.handleLogout(e)}>退出</a> */}
+            <LinkButton onClick={(e)=>this.handleLogout(e)}>退出</LinkButton>
           </div>
         </div>
 

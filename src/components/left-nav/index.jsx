@@ -17,16 +17,17 @@ function LeftNav(){
     
     //菜单数据结构
     const data =[
-      ["首页", 'home',[['Home','home1'],['Account','account1']]],
-      ["商品" ,'account',[['User','user'],['Role','role']]],
+      ["首页", 'homepage',[['User','user'],['Role','role']]],
+      ["商品" ,'productpage',[['商品管理','product'],['品类管理','account']]],
     ]
     let datamenu=[]
     
+
     
     //演染菜单数据
     datamenu = data.map((item)=>{
         return {label:item[0],key:item[1],icon:getIcon(item[0]),children:item[2].map((itemchildren)=>{
-          return {label:itemchildren[0],key:itemchildren[1],icon:getIcon(itemchildren[0]),onClick:()=>{return navigate(itemchildren[0].toLowerCase())}}
+          return {label:itemchildren[0],key:itemchildren[1],icon:getIcon(itemchildren[1]),onClick:()=>{return navigate(itemchildren[1].toLowerCase())}}
         })}
     })
 

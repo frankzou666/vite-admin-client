@@ -4,7 +4,7 @@ import { HomeOutlined, UserOutlined,HolderOutlined,IdcardOutlined,MailOutlined,E
 
 const getIcon = function (name) {
     switch(name){
-        case 'User':  return <UserOutlined /> ;break;
+        case 'product':  return <UserOutlined /> ;break;
         case '商品':  return <MailOutlined /> ;break;
         case '首页':  return <HomeOutlined /> ;break;
         case 'User':  return <UserOutlined /> ;break;
