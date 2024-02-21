@@ -5,8 +5,8 @@ import {Space,Card,Table,Button, Pagination,Modal,notification,Select, Input,mes
 import {AppstoreAddOutlined, UserOutlined,HolderOutlined,IdcardOutlined,SearchOutlined ,ArrowRightOutlined} from '@ant-design/icons'
 
 
-import {reqProducts,reqProductsSearch,reqCategoryUpdateStatus} from '../../api'
-import AddUpdate from './addupdate'
+import {reqProducts,reqProductsSearch,reqCategoryUpdateStatus,reqCategoryDelete} from '../../api'
+import ProductAddUpdate from './productaddupdate'
 import ProductDetail from './productdetail'
 import ProductHome from './producthome'
 import LinkButton from '../../components/link-button'
@@ -29,6 +29,7 @@ import { toHexFormat } from 'antd/es/color-picker/color';
       searchKeyWords:'',
       pagingPage:this.props.location.state?this.props.location.state.pagingPage:1,
       current:this.props.location.state?this.props.location.state.pagingPage:1,
+      isDeleteProduct:false
     }
     
   }   
@@ -77,8 +78,9 @@ import { toHexFormat } from 'antd/es/color-picker/color';
         title: '操作',
         render:(_,record)=>{
           return <span>
-                    <LinkButton onClick={()=>{this.props.navigate('/product/productdetail',{state:{record:record,pagingPage:this.state.pagingPage}})}}>详情</LinkButton>
-                    <LinkButton>修改</LinkButton>
+                    <LinkButton style={{paddingLeft:5,paddingRight:5}} onClick={()=>{this.props.navigate('/product/productdetail',{state:{record:record,pagingPage:this.state.pagingPage}})}}>详情</LinkButton>
+                    <LinkButton style={{paddingLeft:0,paddingRight:5}} onClick={()=>{this.props.navigate('/product/addupdate',{state:{record:record,pagingPage:this.state.pagingPage}})}}>修改</LinkButton>
+                    <LinkButton  style={{paddingLeft:0,paddingRight:5,color:'#ff4d4f'}}  onClick={()=>{this.handelDeleteProduct(record)}} >删除</LinkButton>
                  </span>
         }
       },
@@ -87,24 +89,52 @@ import { toHexFormat } from 'antd/es/color-picker/color';
   }
   componentWillMount(){
     this.initalColumns()
-
   }
+  //处理商品 上架/下架 操作
   handelOnOrOffSale=async (record,status)=>{
-    console.log(status)
     const result = await reqCategoryUpdateStatus(record._id,status);
-    const description = status?"上架":"下架"
+    const description = status?"上架":"下架";
+    const page = this.state.pagingPage;
+    let notificationMsg;
     if (result.status==0) {
+      notificationMsg={message:'成功',description:'商品名称:'+record.name+','+'操作:'+description+',结果:'+'成功',placement:'bottomRight',duration:2}
       if (status){
-        notification.success({message:'成功',description:'商品名称:'+record.name+','+'操作:'+description+',结果:'+'成功',placement:'bottomRight',duration:2})  
+        notification.success(notificationMsg)  
       } else {
-        notification.warning({message:'成功',description:'商品名称:'+record.name+','+'操作:'+description+',结果:'+'成功',placement:'bottomRight',duration:2})  
+        notification.warning(notificationMsg)  
       }
-      
-      this.getProductsBySearch()
+      this.getProductsBySearch(page)
     } else{
-      notification.error({message:'警告',description:'商品名称:'+record.name+','+description+'失败!!!',placement:'bottomRight',duration:3})  
-      this.getProductsBySearch()
+      notificationMsg = {message:'警告',description:'商品名称:'+record.name+','+description+'失败!!!',placement:'bottomRight',duration:3}
+      notification.error(notificationMsg)  
+      this.getProductsBySearch(page)
     }
+  }
+
+  //删除商品
+  handelDeleteProduct=(record)=>{
+    Modal.confirm({
+      title:"确认",
+      content: '是否要删除,商品名称：'+record.name+'?',
+      okText: '确认',
+      cancelText: '取消',
+      onOk: async ()=>{
+        const result = await reqCategoryDelete(record._id)
+        if (result.status==0) {
+          notification.warning({message:'成功',description:'商品名称:'+record.name+','+'操作:删除,结果:成功',placement:'bottomRight',duration:2})  
+          this.getProductsBySearch()
+        } else{
+          notification.error({message:'警告',description:'商品名称:'+record.name+','+'操作:删除,结果:失败!!!',placement:'bottomRight',duration:3})  
+          this.getProductsBySearch()
+        }
+      }
+    })
+
+
+
+
+                            
+   
   }
 
   //没有任何条件的搜索
@@ -118,7 +148,6 @@ import { toHexFormat } from 'antd/es/color-picker/color';
       message.error('获取商品失败!')
     }
     this.setState({isLoading:false})
-
   }
 
   //有条件的搜索
@@ -148,7 +177,6 @@ import { toHexFormat } from 'antd/es/color-picker/color';
 
   componentDidMount(){
     this.getProducts()
-    console.log(this.props.location)
   }
   handleClick=()=>{
     this.props.navigate('/product/addupdate')
@@ -159,8 +187,12 @@ import { toHexFormat } from 'antd/es/color-picker/color';
   render() {
     const Option = Select.Option
     const pageSize = PAGE_SIZE
-    const productsTotal = this.state.productsTotal
-    const current = this.state.current
+    const columns= this.columns
+    const {productsTotal,current,isDeleteProduct,products,isLoading} = this.state
+    // const current = this.state.current
+    // const isDeleteProduct = this.state.isDeleteProduct
+    // const products =  this.state.products
+    // const isLoading = this.state.isLoading
     const title=(
       <div className='card-title'> 
          <Select defaultValue={this.state.searchType} onChange={(value)=>this.setState({searchType:value})}>
@@ -173,15 +205,12 @@ import { toHexFormat } from 'antd/es/color-picker/color';
     )
 
     const extra=(
-      <Button type='primary'  icon={<AppstoreAddOutlined />}>添加商品</Button>
+      <Button type='primary'  icon={<AppstoreAddOutlined/>}  onClick={()=>{this.props.navigate('/product/addupdate')}}>添加商品</Button>
     )
 
-    const products =  this.state.products
-    
     return (
-   
           <Card title={title} extra={extra} className='P-Card' >
-            <Table rowKey='_id' dataSource={products} columns={this.columns} bordered size='small'
+            <Table rowKey='_id' loading={isLoading} dataSource={products} columns={columns} bordered size='small'
             pagination = {{ defaultPageSize:pageSize,current:current,total:productsTotal,onChange:(page)=>{ 
               if (this.state.searchKeyWords){
                 this.getProductsBySearch(page)
@@ -195,6 +224,7 @@ import { toHexFormat } from 'antd/es/color-picker/color';
               }}}  >
                
             </Table>
+             
           </Card>
        
     )

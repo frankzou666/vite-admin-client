@@ -71,5 +71,19 @@ export const reqProducts =(pageNum,pageSize=PAGE_SIZE)=> ajax('/api/manage/produ
 
 export const reqProductsSearch =(pageNum,pageSize=PAGE_SIZE,searchName,productName,productDesc)=> ajax('/api/manage/product/search',{pageNum:pageNum,pageSize:pageSize,searchName:searchName,productName:productName,productDesc:productDesc},'get') 
 
+
 export const reqCategoryInfo =(categoryId)=> ajax('/api/manage/category/info',{categoryId:categoryId},'get') 
 export const reqCategoryUpdateStatus =(productId,status)=> ajax('/api/manage/product/updateStatus',{productId:productId,status:status},'post') 
+export const reqCategoryDelete =(productId)=> ajax('/api/manage/product/delete',{productId:productId},'post') 
+//增加商品
+
+export const reqProductAdd =(categoryId,pCategoryId,name,price,desc,status,imgs,detail)=> ajax('/api/manage/product/add',{categoryId:categoryId,pCategoryId:pCategoryId,name:name,price:price,desc:desc,status:status,imgs:imgs,detail:detail},'post') 
+
+//修改商品
+export const reqProductUpdate =(_id,categoryId,pCategoryId,name,price,desc,status,imgs,detail)=> ajax('/api/manage/product/update',{_id,categoryId:categoryId,pCategoryId:pCategoryId,name:name,price:price,desc:desc,status:status,imgs:imgs,detail:detail},'post') 
+
+
+
+//删除图片
+
+export const reqImgDelete =(name)=> ajax('/api/manage/img/delete',{name:name},'post') 

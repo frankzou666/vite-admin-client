@@ -13,7 +13,7 @@ import Account from '../account'
 import User from '../user'
 import Role from '../role'
 import Product from '../product'
-import AddUpdate from '../product/addupdate'
+import ProductAddUpdate from '../product/productaddupdate'
 import ProductDetail from '../product/productdetail'
 import {APP_NAME} from '../../config/globalConfig'
 
@@ -49,7 +49,7 @@ export default class Admin extends Component {
               <Route path='/home' element={<Home />}></Route>
               <Route path='/account' element={<Account />}></Route>
               <Route path='/product' element={<Product />} extact></Route>
-              <Route path='/product/addupdate'     element={<AddUpdate />}></Route>
+              <Route path='/product/addupdate'     element={<ProductAddUpdate />}></Route>
               <Route path='/product/productdetail' element={<ProductDetail />}></Route>
               <Route path='/product/*' element={<Product />}></Route>
               <Route path='/user' element={<User />}></Route>

@@ -7,6 +7,7 @@ import LinkButton from '../../components/link-button'
 import AddForm from './add-form'
 import UpdateForm from './update-form'
 import {reqCategorys} from '../../api/index'
+import { PAGE_SIZE } from '../../utils/constants'
 
 
 export default class Account extends Component {
@@ -127,7 +128,7 @@ export default class Account extends Component {
         extra={extra}
        
       >
-        <Table rowKey="_id" bordered dataSource={parentId==='0'?categorys:subCategorys} columns={this.columns} pagination={{defaultPageSize:5}} loading={isLoading}>
+        <Table rowKey="_id" bordered dataSource={parentId==='0'?categorys:subCategorys} columns={this.columns} pagination={{defaultPageSize:PAGE_SIZE}} loading={isLoading}>
 
         </Table>
 

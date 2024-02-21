@@ -8,7 +8,7 @@ import {message} from 'antd'
 
 
 
-const BASE_URL ='http://localhost:5500'
+
 
 export default function ajax(url,data={},type='get'){
 
