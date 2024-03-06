@@ -1,14 +1,15 @@
 import React, { Component } from 'react'
 
-import {Space,Card,Table,Button, Pagination,Modal,notification} from 'antd';
+import {Space,Card,Table,Button, Pagination,Modal,notification, message} from 'antd';
 import {AppstoreAddOutlined, UserOutlined,HolderOutlined,IdcardOutlined,SearchOutlined ,ArrowRightOutlined} from '@ant-design/icons'
 
 import LinkButton from '../../components/link-button'
 import AddForm from './add-form'
 import UpdateForm from './update-form'
-import {reqCategorys} from '../../api/index'
+import {reqCategorys,reqCategoryDelete} from '../../api/index'
 import { PAGE_SIZE } from '../../utils/constants'
 
+import './account.styl'
 
 export default class Account extends Component {
   constructor(props){
@@ -33,8 +34,9 @@ export default class Account extends Component {
         width:'300px',
         render: (_, record) => (
           <Space size="middle">
-            <LinkButton  onClick={(e)=>{this.showUpdateCategoryModal(e,record)}}>修改分类</LinkButton>
-            {this.state.parentId==='0'?<LinkButton onClick={(e)=>this.getSubCategorys(e,record)}>查看子分类</LinkButton>:null}
+            <LinkButton  style={{paddingLeft:0,paddingRight:5}}  onClick={(e)=>{this.showUpdateCategoryModal(e,record)}}>修改</LinkButton>
+            <LinkButton  style={{paddingLeft:0,paddingRight:5,color:'#ff4d4f'}}  onClick={(e)=>{this.deleteCategory(e,record)}}>删除</LinkButton>
+            {this.state.parentId==='0'?<LinkButton style={{paddingLeft:0,paddingRight:5}}  onClick={(e)=>this.getSubCategorys(e,record)}>查看子分类</LinkButton>:null}
             
           </Space>
         ),
@@ -91,6 +93,31 @@ export default class Account extends Component {
     
 
   }
+  
+  deleteCategory=(e,record) =>{
+    const {_id,name} = record
+    console.log(record)
+    Modal.confirm({
+      title:'删除分类',
+      okText:'确定',
+      cancelText:'取消',
+      content:'是否确定要删除分类:'+name+' ?',
+      onOk:async ()=>{
+        if (record.parentId!=='0') {
+           const categoryId= record._id
+           const result = await reqCategoryDelete(categoryId)
+           if (result.status===0) {
+            this.setState({parentId:record.parentId})
+            this.getCategorys()
+            message.success('删除分类成功')
+           } else{
+             message.error('删除分类失败')
+           }
+        }
+      },
+      onClose:()=>{}
+  }) 
+  }
 
   componentWillMount(){
   
@@ -140,6 +167,8 @@ export default class Account extends Component {
        <Modal title="修改分类" footer='' open={showStatus===2?true:false} onCancel={this.onCancel}> 
          <UpdateForm key={updateCategory._id+Math.random()} onCancel={this.onCancel} getCategorys={this.getCategorys} updateCategory={updateCategory} />
        </Modal>
+
+    
       </Card>
     )
   }

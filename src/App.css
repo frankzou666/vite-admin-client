@@ -1,0 +1,10 @@
+
+
+.disabledElement{
+    background-color: #aaa;
+    
+}
+
+.disabledElement:hover{
+    cursor:not-allowed
+}

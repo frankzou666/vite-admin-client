@@ -5,6 +5,7 @@ import {AppstoreAddOutlined, UserOutlined,HolderOutlined,IdcardOutlined,SearchOu
 
 import { reqCategorys,reqCategoryInfo,reqProductAdd,reqProductUpdate} from '../../api'
 import LinkButton from '../../components/link-button';
+import RichTextEditor from '../../components/rich-text-editor'
 import PicturesWall from './pictureswall'
 
 
@@ -28,6 +29,7 @@ class ProductAddUpdateWrapper extends Component {
       categoryId:'',
       pCategoryId:'',
       imgs:imgs,
+      editorText:'',  //得到文件编辑的文本
 
     }  
 
@@ -47,6 +49,7 @@ class ProductAddUpdateWrapper extends Component {
   }
 
   async componentDidMount(){
+    
     await this.getCategorys()
     if (this.state.record ) {
        if (this.state.isAddOrUpdatFlag===2) {
@@ -110,12 +113,16 @@ class ProductAddUpdateWrapper extends Component {
     this.setState({imgs:fileList.map(file=>file.name)})
   }
 
+  //文本编辑器数据回调
+  getEditorText=(text)=>{
+    this.setState({detail:text})
+
+  }
   handleSubmit= async (values)=>{
-    const detail = '暂时为空'
     const {name,desc,price} =values
     //当前是新增商品
     if (this.state.isAddOrUpdatFlag==1 ) {
-       const {pCategoryId,categoryId,imgs} = this.state
+       const {pCategoryId,categoryId,imgs,detail} = this.state
        const status =1
        const result  = await reqProductAdd(categoryId,pCategoryId,name,price,desc,status,imgs,detail)
        if (result.status===0) {
@@ -130,7 +137,7 @@ class ProductAddUpdateWrapper extends Component {
       let pCategoryId
       let categoryId
       let status
-      const {imgs} = this.state
+      const {imgs,detail} = this.state
       if (this.state.categoryId) {
         categoryId = this.state.categoryId
         pCategoryId = this.state.pCategoryId
@@ -187,7 +194,12 @@ class ProductAddUpdateWrapper extends Component {
           <Form.Item name='price'  label='商品价格'   rules={[{required: true, message: '请输入商品名称'}]} initialValue={price} ><Input   type='number' addonAfter='元' /></Form.Item>
           <Form.Item  label='商品分类'  rules={[{required: true, message: '商品分类必选'}]} ><Cascader   defaultValue={defaultValue} options={this.state.options} loadData={this.loadData} onChange={this.onChange} /></Form.Item>
           <Form.Item  label='商品图片'  ><PicturesWall getImages={this.getImages} imgs={imgs}></PicturesWall></Form.Item>
-          <Form.Item  label='商品详情'  ></Form.Item>
+          
+          <Form.Item  label='商品详情'  
+             labelCol={{ span: 2 }}
+             wrapperCol={{ span: 20 }}
+          
+          > <RichTextEditor getEditorText = {this.getEditorText}  detail={detail} /> </Form.Item>
           <Form.Item> <Button style={{marginLeft:'60%'}} type='primary' htmlType="submit"  >提交</Button></Form.Item>
         </Form>
 

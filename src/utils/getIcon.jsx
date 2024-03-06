@@ -1,16 +1,16 @@
 
-import { HomeOutlined, UserOutlined,HolderOutlined,IdcardOutlined,MailOutlined,EditOutlined} from '@ant-design/icons'
+import { HomeOutlined, UserOutlined,HolderOutlined,IdcardOutlined,MailOutlined,EditOutlined ,AppstoreOutlined,SettingOutlined} from '@ant-design/icons'
 
 
 const getIcon = function (name) {
     switch(name){
-        case 'product':  return <UserOutlined /> ;break;
+        case 'product':  return <AppstoreOutlined /> ;break;
         case '商品':  return <MailOutlined /> ;break;
-        case '首页':  return <HomeOutlined /> ;break;
-        case 'User':  return <UserOutlined /> ;break;
-        case 'Account':  return <HolderOutlined /> ;break;
-        case 'Home':   return <IdcardOutlined /> ;break;
-        case 'Role':   return <EditOutlined /> ;break;
+        case '系统':  return <SettingOutlined /> ;break;
+        case 'user':  return <UserOutlined /> ;break;
+        case 'account':  return <HolderOutlined /> ;break;
+        case 'home':   return <IdcardOutlined /> ;break;
+        case 'role':   return <EditOutlined /> ;break;
         default:return <HomeOutlined /> ;break;
 
     }

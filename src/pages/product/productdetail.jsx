@@ -32,6 +32,7 @@ import './productdetail.styl'
     let result1;
     let result2;
 
+
     //获取分类信息
     // result = await reqCategoryInfo(this.state.record.pCategoryId );
     // if (result.status===0) {

@@ -5,7 +5,7 @@ import {Space,Card,Table,Button, Pagination,Modal,notification,Select, Input,mes
 import {AppstoreAddOutlined, UserOutlined,HolderOutlined,IdcardOutlined,SearchOutlined ,ArrowRightOutlined} from '@ant-design/icons'
 
 
-import {reqProducts,reqProductsSearch,reqCategoryUpdateStatus,reqCategoryDelete} from '../../api'
+import {reqProducts,reqProductsSearch,reqCategoryUpdateStatus,reqProductDelete} from '../../api'
 import ProductAddUpdate from './productaddupdate'
 import ProductDetail from './productdetail'
 import ProductHome from './producthome'
@@ -119,7 +119,7 @@ import { toHexFormat } from 'antd/es/color-picker/color';
       okText: '确认',
       cancelText: '取消',
       onOk: async ()=>{
-        const result = await reqCategoryDelete(record._id)
+        const result = await reqProductDelete(record._id)
         if (result.status==0) {
           notification.warning({message:'成功',description:'商品名称:'+record.name+','+'操作:删除,结果:成功',placement:'bottomRight',duration:2})  
           this.getProductsBySearch()
