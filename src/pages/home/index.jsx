@@ -1,8 +1,12 @@
 import React, { Component } from 'react'
+import { useSelector,useDispatch } from 'react-redux'
 
 
 import './home.styl'
-export default class Home extends Component {
+class HomeWrapper extends Component {
+  componentDidMount=()=>{
+     
+  }
   render() {
     return (
       <div className='P-home'>
@@ -11,3 +15,13 @@ export default class Home extends Component {
     )
   }
 }
+
+
+function Home(props){
+  const  selector = useSelector((state)=>state.user);
+  const  dispatch = useDispatch();
+  return   <HomeWrapper selector={selector}  dispatch={dispatch} props></HomeWrapper>
+
+}
+
+export default Home

@@ -4,7 +4,7 @@ import { createBrowserHistory,createMemoryHistory } from "history";
 import {Space,Card,Table,Button, Pagination,Modal,notification,Select, Input,message} from 'antd';
 import {AppstoreAddOutlined, UserOutlined,HolderOutlined,IdcardOutlined,SearchOutlined ,ArrowLeftOutlined,ArrowRightOutlined} from '@ant-design/icons'
 
-
+import { useSelector,useDispatch } from 'react-redux'
 import {reqUser,reqDeleteUser} from '../../api'
 import {formatDate} from '../../utils/formatDate'
 import LinkButton from '../../components/link-button'
@@ -76,7 +76,8 @@ class UserWapper extends Component {
   }
   componentWillMount(){
     this.initalColumns()
-    this.setState({user:''})
+    
+
   }
   
   //所取所有用户
@@ -112,7 +113,9 @@ class UserWapper extends Component {
   //显示增加或修改用户对话框
   handleClickUser=(isAddorUpdate)=>{
     //表示当前是修改用户
+    setTimeout(()=>{this.props.dispatch({type:'set',data:{username:'hello'}})},500);
     this.setState({isAddorUpdate:isAddorUpdate},()=>{ this.setState({showModalAddUpdate:1})})
+    
    
   }
 
@@ -191,7 +194,9 @@ class UserWapper extends Component {
 function User(props){ 
     const navigate=useNavigate()
     const location = useLocation()
-    return <UserWapper navigate={navigate}  props></UserWapper>
+    const  dispatch = useDispatch();
+    const  selector = useSelector((state)=>state.count);
+    return <UserWapper navigate={navigate} selector={selector} dispatch={dispatch} props></UserWapper>
 
 }
 

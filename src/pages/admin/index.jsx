@@ -13,6 +13,7 @@ import Account from '../account'
 import User from '../user'
 import Role from '../role'
 import Product from '../product'
+import Pie from '../pie'
 import ProductAddUpdate from '../product/productaddupdate'
 import ProductDetail from '../product/productdetail'
 import {APP_NAME} from '../../config/globalConfig'
@@ -54,7 +55,8 @@ export default class Admin extends Component {
               <Route path='/product/*' element={<Product />}></Route>
               <Route path='/user' element={<User />}></Route>
               <Route path='/role' element={<Role />}></Route>
-               {/*以前版本使用<Ridirect> 现只使用Navigte来处理了，定义一个默认路由*/} 
+              <Route path='/pie' element={<Pie />}></Route>
+               {/*以前版本使用<Ridirect> 现只使用Navigte来处理了，定义一个默认路由,也可以做一个404*/} 
                <Route path='/*' element={<Navigate to='/home'></Navigate>}></Route>
               
             </Routes>

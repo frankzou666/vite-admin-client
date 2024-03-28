@@ -190,7 +190,10 @@ class RoleWapper extends Component {
                 this.setState({current:page})
               }
               }}}  
-              rowSelection={{type:"radio",selectedRowKeys:[selectedRowKeys],onChange:this.onChange}}
+              rowSelection={{type:"radio",
+                             selectedRowKeys:[role._id],
+                             onSelect:(role)=>{this.setState({role:role})},
+                             onChange:this.onChange}}
               
               onRow={this.onRow}
               >

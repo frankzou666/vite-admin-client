@@ -4,8 +4,9 @@ import React, { Component } from 'react'
 import { useNavigate,Navigate } from 'react-router-dom'
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input,message } from 'antd';
-
+import { useSelector,useDispatch } from 'react-redux'
 import { reqLogin } from '../../api'
+import store from '../../store/index'
 import storeUtils from '../../utils/storeUtils'
 import memoryUtils from '../../utils/memoryUtils'
 import {APP_NAME} from '../../config/globalConfig'
@@ -14,7 +15,7 @@ import './login.styl'
 
 
 //登录的路由组件
-export default class Login extends Component {
+class LoginWapper extends Component {
   constructor(props){    
     super(props);
     this.state={
@@ -32,6 +33,9 @@ export default class Login extends Component {
     if (result.status===0){
       message.success('登录成功')
       storeUtils.saveUser(result.data)
+      //登录成功后，用户信息放到redux中
+      //this.props.dispatch({type:'set',data:result.data})
+      store.dispatch({type:'set',data:result.data})
       //所有路由组件三个特性
       this.setState({loginSuccess:true})
     } else{
@@ -42,6 +46,8 @@ export default class Login extends Component {
   }
   componentDidMount(){
     window.document.title=APP_NAME
+    // 订阅store 状态回调
+    store.subscribe(()=>{console.log('store has been update')})
   }
   render() {
     if (this.state.loginSuccess) {
@@ -107,3 +113,14 @@ export default class Login extends Component {
   }    
     
 }
+
+
+function Login(props) {
+  console.log(props)
+  const navigate=useNavigate()
+  const  selector = useSelector((state)=>state.count);
+  const  dispatch = useDispatch();
+  return <LoginWapper navigate={navigate} selector={selector}  dispatch={dispatch} props></LoginWapper>
+
+}
+export default Login

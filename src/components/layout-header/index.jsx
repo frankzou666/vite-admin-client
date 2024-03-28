@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import { useLocation, useNavigate  } from 'react-router-dom'
 import {Modal} from 'antd';
-
+import { useSelector,useDispatch } from 'react-redux'
 
 import {reqWeather,reqCity} from '../../api/index'
 import {APP_NAME} from '../../config/globalConfig'
 import {formatDate} from '../../utils/formatDate'
 import storeUtils from '../../utils/storeUtils'
 import LinkButton from '../../components/link-button'
+import store from '../../store/index'
 import './layout-header.styl'
 
 class LayoutHeaderWapper extends Component {
@@ -61,7 +62,10 @@ class LayoutHeaderWapper extends Component {
 
   //组件挂载开始执行定时器
   async componentDidMount(){
-    this.setState({currentUser:storeUtils.getUser().username})
+    console.log(store.getState().user.username)
+
+    //从redux来取user信息
+    this.setState({currentUser:store.getState().user.username})
     this.getCity()
     this.getCurrentDateTimeStrByInterval()
     this.getWeather()

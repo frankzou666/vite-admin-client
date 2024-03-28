@@ -1,5 +1,5 @@
 
 
-const APP_NAME='硅谷后台'
+const APP_NAME='XX后台'
 
 export {APP_NAME}

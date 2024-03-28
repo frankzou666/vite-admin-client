@@ -10,7 +10,8 @@ import Login from './pages/login'
 import './App.css'
 import './assets/css/minireset.css'
 
-function App() {
+function App(props) {
+  //得到store里面的count属性的值
 
   return (
     <BrowserRouter>

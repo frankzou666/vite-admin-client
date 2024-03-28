@@ -96,7 +96,7 @@ class UserAddUpdateFormWrapper extends Component {
           <Form.Item name='password'  label='密码'  initialValue={password} ><Input  /></Form.Item>       
           <Form.Item name='email'     label='邮箱'    initialValue={email} ><Input  /></Form.Item>  
           <Form.Item name='phone'     label='电话'  initialValue={phone} ><Input  /></Form.Item> 
-          <Form.Item name='role_id'   label='角色名称'   ><Cascader  defaultValue={defaultRole}  options={this.state.roles}  onChange={this.onChange} /> 
+          <Form.Item name='role_id'   label='角色名称'   ><Cascader  initialValues={defaultRole}  options={this.state.roles}  onChange={this.onChange} /> 
           </Form.Item> 
           
           <Form.Item style={{marginLeft:'10%'}}>   

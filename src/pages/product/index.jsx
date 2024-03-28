@@ -4,6 +4,7 @@ import { createBrowserHistory,createMemoryHistory } from "history";
 import {Space,Card,Table,Button, Pagination,Modal,notification,Select, Input,message} from 'antd';
 import {AppstoreAddOutlined, UserOutlined,HolderOutlined,IdcardOutlined,SearchOutlined ,ArrowRightOutlined} from '@ant-design/icons'
 
+import store from '../../store/index'
 
 import {reqProducts,reqProductsSearch,reqCategoryUpdateStatus,reqProductDelete} from '../../api'
 import ProductAddUpdate from './productaddupdate'
@@ -177,6 +178,7 @@ import { toHexFormat } from 'antd/es/color-picker/color';
 
   componentDidMount(){
     this.getProducts()
+    console.log(store.getState().count)
   }
   handleClick=()=>{
     this.props.navigate('/product/addupdate')
